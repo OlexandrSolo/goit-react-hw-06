@@ -1,0 +1,13 @@
+.formWrapper {
+  width: 900px;
+}
+
+.container {
+  max-width: 400px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 20px;
+  background-color: #202023; /* Фон контейнера (можна змінити) */
+  box-shadow: 0 0 10px rgba(197, 184, 184, 0.1); /* Додати тінь для стилю */
+  border-radius: 10px; /* Заокруглення кутів */
+}

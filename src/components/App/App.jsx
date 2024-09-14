@@ -1,32 +1,46 @@
-import { useState } from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
+
+import style from "./App.module.css";
+import ContactForm from "../ContactForm/ContactForm";
+import ContactList from "../ContactList/ContactList";
+import SearchBox from "../SearchBox/SearchBox";
+import initialContactList from "../../../contactList.json";
+
+const getInitialValue = () => {
+  const checkStorage = localStorage.getItem("contactList");
+  return checkStorage ? JSON.parse(checkStorage) : initialContactList;
+};
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [contactList, setContactList] = useState(getInitialValue);
+  const [filter, setFilter] = useState("");
+  useEffect(() => {
+    const phoneBook = JSON.stringify(contactList);
+    localStorage.setItem("contactList", phoneBook);
+  }, [contactList]);
+
+  const addNewUser = (newUser) => {
+    setContactList((prevState) => [...prevState, newUser]);
+  };
+
+  const onDeleteUser = (contactId) => {
+    return setContactList((prevState) =>
+      prevState.filter((contact) => contact.id !== contactId)
+    );
+  };
+
+  const visiblePhoneBook = contactList.filter((contact) =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className={style.formWrapper}>
+      <div className={style.container}>
+        <ContactForm updateContactList={addNewUser} />
+        <SearchBox value={filter} onFilter={setFilter} />
+        <ContactList userList={visiblePhoneBook} onDelete={onDeleteUser} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 

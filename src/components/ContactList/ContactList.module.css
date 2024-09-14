@@ -1,0 +1,8 @@
+.contact:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.contact span {
+  display: inline-block;
+  padding-right: 10px;
+}
