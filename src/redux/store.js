@@ -1,7 +1,10 @@
 import { configureStore, createAction } from "@reduxjs/toolkit"
 
 export const newContact = createAction("contact/newContact")
+export const deleteContact = createAction("contact/deleteContact")
 export const searchContact = createAction('filters/searchContact')
+export const filterList = createAction('filters/filterList')
+
 
 const initialValues = {
     contacts: {
@@ -41,15 +44,33 @@ const rootReducer = (state = initialValues, action) => {
                     items: [...state.contacts.items, action.payload]
                 }
             }
+        case "contact/deleteContact":
+            return {
+                ...state,
+                contacts: {
+                    items: state.contacts.items.filter(contact => contact.id !== action.payload)
+                }
+            }
         case "filters/searchContact":
             return {
                 ...state,
                 filters: {
                     name: action.payload
+                    // contacts: {
+                    //     items: state.contacts.items.filter(contact => contact.id === action.payload)
+                    // }
                 }
             }
+
+        case "filters/filterList": {
+            return {
+                ...state,
+                contact: {
+                    items: state.contacts.items.filter(contact => contact.name.toLowerCase() === action.payload.toLowerCase())
+                }
+            }
+        }
         default:
-            console.log(state);
             return state;
     };
 

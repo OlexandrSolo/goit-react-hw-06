@@ -1,8 +1,7 @@
 import { nanoid } from "nanoid";
 import { useId } from "react";
-import PropTypes from "prop-types";
 import { Form, Field, Formik, ErrorMessage } from "formik";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 import { newContact } from "../../redux/store";
@@ -25,40 +24,16 @@ const phoneBookSchema = Yup.object().shape({
     .required("Required"),
 });
 
-export default function ContactForm({ updateContactList }) {
-  const contacts = useSelector((state) => state.contacts);
+export default function ContactForm() {
   const dispatch = useDispatch();
 
-  const handleSubmit = (values, action) => {
+  const handleSubmit = (values, actions) => {
     const id = nanoid();
-    // const checkNewContact = contacts.items.find(
-    //   (user) => user.name === values.name
-    // );
-    // const change =
-    //   checkNewContact &&
-    //   confirm(
-    //     `Контак ${checkNewContact.name}: ${checkNewContact.number} вже існує. Продовжити додання?`
-    //   );
-    // if (change) {
-    //   return;
-    // }
     dispatch(newContact({ id, name: values.name, number: values.number }));
-    // action.reset();
+    actions.resetForm();
   };
 
   const idLabel = useId();
-
-  // const handleSubmitForm = (values, actions) => {
-  //   const id = nanoid();
-
-  //   updateContactList({
-  //     id,
-  //     name: values.name,
-  //     number: values.number,
-  //   });
-
-  //   actions.resetForm();
-  // };
   return (
     <Formik
       onSubmit={handleSubmit}
@@ -100,7 +75,3 @@ export default function ContactForm({ updateContactList }) {
     </Formik>
   );
 }
-
-ContactForm.propTypes = {
-  updateContactList: PropTypes.func.isRequired,
-};
