@@ -14,10 +14,7 @@ const getFilteredList = (contactList, filter) => {
 export default function ContactList() {
   const contactList = useSelector(selectContact);
   const filterName = useSelector(selectFilter);
-  // const filterName = useSelector(state=>state);
-  // console.log(filterName);
   const list = getFilteredList(contactList, filterName);
-  // console.log(list);
 
   return (
     <ul>
