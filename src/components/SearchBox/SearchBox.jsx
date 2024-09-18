@@ -1,13 +1,15 @@
 import { useId } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterList, searchContact } from "../../redux/store";
-import PropTypes from "prop-types";
+import { filters, selectFilter } from "../../redux/filtersSlice";
 import style from "./SearchBox.module.css";
 
 export default function SearchBox() {
   const dispatch = useDispatch();
-  const userInput = useSelector((state) => state.filters.name);
-  const onFilter = (name) => dispatch(searchContact(name));
+  const userInput = useSelector(selectFilter);
+  const onFilter = (evt) => {
+    const name = evt.target.value;
+    dispatch(filters(name));
+  };
 
   const id = useId();
   return (
@@ -16,7 +18,7 @@ export default function SearchBox() {
         className={style.formInput}
         type="text"
         value={userInput}
-        onChange={(evt) => onFilter(evt.target.value)}
+        onChange={onFilter}
         name="searchContact"
         id={`${id}-'searchContact'`}
       />

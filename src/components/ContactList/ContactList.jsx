@@ -1,27 +1,27 @@
-import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import style from "./ContactList.module.css";
 
 import ContactListItem from "../Contact/Contact";
-import { filterList } from "../../redux/store";
+import { filters, selectFilter } from "../../redux/filtersSlice";
+import { selectContact } from "../../redux/contactsSlice";
 
-const getVisibleContact = (contactList, name) => {
-  // if (name === "") {
-  //   return contactList;
-  // }
-  // return contactList.filter(
-  //   (contact) => contact.name.toLowerCase() === name.toLowerCase()
-  // );
+const getFilteredList = (contactList, filter) => {
+  return contactList.filter((item) =>
+    item.name.toLowerCase().includes(filter.toLowerCase())
+  );
 };
 
 export default function ContactList() {
-  const contactList = useSelector((state) => state.contacts.items);
-  const userName = useSelector((state) => state.filters.name);
-  // const newList = getVisibleContact(contactList, userName);
+  const contactList = useSelector(selectContact);
+  const filterName = useSelector(selectFilter);
+  // const filterName = useSelector(state=>state);
+  // console.log(filterName);
+  const list = getFilteredList(contactList, filterName);
+  // console.log(list);
 
   return (
     <ul>
-      {contactList.map((user) => (
+      {list.map((user) => (
         <li key={user.id} className={style.contact}>
           <ContactListItem user={user} />
         </li>
